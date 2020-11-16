@@ -1,0 +1,23 @@
+{
+  "name": "simple-markdown",
+  "version": "1.0.0",
+  "description": "A simple markdown editor allowing use the markdown without some troubles",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "markdown",
+    "vue",
+    "vue",
+    "js",
+    "markdown",
+    "editor",
+    "md",
+    "md",
+    "vue",
+    "js"
+  ],
+  "author": "fman42",
+  "license": "MIT"
+}
