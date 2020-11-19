@@ -91,6 +91,14 @@
                         name: 'changeCase',
                         arguments: ['lower']
                     }
+                },
+                {
+                    id: 'clear',
+                    name: 'Clear',
+                    callback: () => {
+                        this.content = '';
+                        this.saveTextareaHistory();
+                    }
                 }
             ];
 
@@ -159,6 +167,9 @@
             },
 
             executeToolCallback(callback) {
+                if (typeof callback === 'function')
+                    return callback.call();
+
                 if (typeof this[callback.name] !== 'function')
                     return console.error('Method is not found: ' + callback.name);
 
