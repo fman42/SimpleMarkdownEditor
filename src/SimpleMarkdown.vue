@@ -47,6 +47,10 @@
                 this.saveTextareaHistory();
             },
 
+            applyHeading(symbols) {
+                this.content = `${symbols} ${this.selectedText}`; 
+            },
+
             changeCase(toCase) {
                 let updatedContent = this.content;
 
