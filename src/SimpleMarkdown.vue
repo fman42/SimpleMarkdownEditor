@@ -6,18 +6,24 @@
         <textarea class="simple-markdown__field" ref="field" v-on:change="saveTextareaHistory()" v-model="content">
             
         </textarea>
+        <!-- Modals -->
+        <InformationModal v-show="modalsVisible.information"></InformationModal>
     </div>
 </template>
 
 <script>
     import Toolbar from './Toolbar.vue';
+    import InformationModal from './Modals/Information.vue';
 
     export default {
         name: 'SimpleMarkdown',
         props: ['disabledTools'],
         data() {
             return {
-                content: ''
+                content: '',
+                modalsVisible: {
+                    information: false
+                }
             }
         },
         created() {
@@ -45,6 +51,10 @@
                     this.content = additionalSymbols + `${this.content}` + additionalSymbols;
 
                 this.saveTextareaHistory();
+            },
+
+            showInformationModal() {
+                this.modalsVisible.information = !this.modalsVisible.information;
             },
 
             applyHeading(symbols) {
@@ -115,7 +125,8 @@
             }
         },
         components: {
-            Toolbar
+            Toolbar,
+            InformationModal
         }
     }
 </script>
