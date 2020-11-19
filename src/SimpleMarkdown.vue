@@ -1,15 +1,7 @@
 <template>
-    <div class="simple-markdown">
+    <div class="simple-markdown" id="markdown_editor">
         <!-- Toolbar -->
-        <section class="simple-markdown__toolbar">
-            <ul>
-                <li v-for="(item, index) in toolbar.filter(x => !disabledIdsTools.includes(x.id))" v-bind:key="index">
-                    <button v-on:click="executeToolCallback(item.callback)">
-                        {{ item.name }}
-                    </button>
-                </li>
-            </ul>
-        </section>
+        <Toolbar :disabledTools="disabledTools" v-on:action="executeToolCallback"></Toolbar>
         <!-- Field -->
         <textarea class="simple-markdown__field" ref="field" v-on:change="saveTextareaHistory()" v-model="content">
             
@@ -18,96 +10,21 @@
 </template>
 
 <script>
+    import Toolbar from './Toolbar.vue';
+
     export default {
         name: 'SimpleMarkdown',
-        props: {
-            disabledTools: {
-                type: Array,
-                default: () => {
-                    return [];
-                }
-            }
-        },
+        props: ['disabledTools'],
         data() {
             return {
-                disabledIdsTools: [],
                 content: ''
             }
         },
         created() {
-            this.toolbar = [
-                {
-                    id: 'undo',
-                    name: 'Undo',
-                    callback: {
-                        name: 'getBranchFromHistory',
-                        arguments: [true]
-                    }
-                },
-                {
-                    id: 'redo',
-                    name: 'Redo',
-                    callback: {
-                        name: 'getBranchFromHistory',
-                        arguments: [false]
-                    }
-                },
-                {
-                    id: 'bold',
-                    name: 'Bold',
-                    callback: {
-                        name: 'applyFormat',
-                        arguments: ['**']
-                    }
-                },
-                {
-                    id: 'italic',
-                    name: 'Italic',
-                    callback: {
-                        name: 'applyFormat',
-                        arguments: ['*']
-                    }
-                },
-                {
-                    id: 'strike',
-                    name: 'Strikethrough',
-                    callback: {
-                        name: 'applyFormat',
-                        arguments: ['~~']
-                    }
-                },
-                {
-                    id: 'toUpper',
-                    name: 'ToUpper',
-                    callback: {
-                        name: 'changeCase',
-                        arguments: ['upper']
-                    }
-                },
-                {
-                    id: 'toLower',
-                    name: 'ToLower',
-                    callback: {
-                        name: 'changeCase',
-                        arguments: ['lower']
-                    }
-                },
-                {
-                    id: 'clear',
-                    name: 'Clear',
-                    callback: () => {
-                        this.content = '';
-                        this.saveTextareaHistory();
-                    }
-                }
-            ];
-
             this.historyStack = [];
             this.currentIndexHistoryStack = 0;
         },
         mounted() {
-            this.disabledIdsTools = this.disabledTools;
-
             setTimeout(() => {
                 this.saveTextareaHistory();
             }, 5000);
@@ -192,6 +109,9 @@
             selectedText: function() {
                 return this.content.slice(this.$refs.field.selectionStart, this.$refs.field.selectionEnd);
             }
+        },
+        components: {
+            Toolbar
         }
     }
 </script>
@@ -201,13 +121,6 @@
         width: 45%;
         background-color: #eff3f7;
         border-radius: 5px;
-    }
-
-    .simple-markdown__toolbar > ul {
-        margin: 0px;
-        padding: 0px;
-        list-style: none;
-        display: flex;
     }
 
     .simple-markdown__field {
