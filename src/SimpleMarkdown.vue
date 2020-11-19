@@ -4,14 +4,14 @@
         <section class="simple-markdown__toolbar">
             <ul>
                 <li v-for="(item, index) in toolbar.filter(x => !disabledIdsTools.includes(x.id))" v-bind:key="index">
-                    <button v-on:click="executeToolCallback(item.callbackName)">
+                    <button v-on:click="executeToolCallback(item.callback)">
                         {{ item.name }}
                     </button>
                 </li>
             </ul>
         </section>
         <!-- Field -->
-        <textarea class="simple-markdown__field" ref="field" v-on:change="onInputHandler($event)" v-model="content">
+        <textarea class="simple-markdown__field" ref="field" v-on:change="saveTextareaHistory()" v-model="content">
             
         </textarea>
     </div>
@@ -39,27 +39,58 @@
                 {
                     id: 'undo',
                     name: 'Undo',
-                    callbackName: 'undo'
+                    callback: {
+                        name: 'getBranchFromHistory',
+                        arguments: [true]
+                    }
                 },
                 {
                     id: 'redo',
                     name: 'Redo',
-                    callbackName: 'redo'
+                    callback: {
+                        name: 'getBranchFromHistory',
+                        arguments: [false]
+                    }
                 },
                 {
                     id: 'bold',
                     name: 'Bold',
-                    callbackName: 'bold'
+                    callback: {
+                        name: 'applyFormat',
+                        arguments: ['**']
+                    }
                 },
                 {
                     id: 'italic',
                     name: 'Italic',
-                    callbackName: 'italic'
+                    callback: {
+                        name: 'applyFormat',
+                        arguments: ['*']
+                    }
                 },
                 {
                     id: 'strike',
                     name: 'Strikethrough',
-                    callbackName: 'strike'
+                    callback: {
+                        name: 'applyFormat',
+                        arguments: ['~~']
+                    }
+                },
+                {
+                    id: 'toUpper',
+                    name: 'ToUpper',
+                    callback: {
+                        name: 'changeCase',
+                        arguments: ['upper']
+                    }
+                },
+                {
+                    id: 'toLower',
+                    name: 'ToLower',
+                    callback: {
+                        name: 'changeCase',
+                        arguments: ['lower']
+                    }
                 }
             ];
 
@@ -67,63 +98,54 @@
             this.currentIndexHistoryStack = 0;
         },
         mounted() {
-            console.log(this.disabledTools);
             this.disabledIdsTools = this.disabledTools;
 
             setTimeout(() => {
-                this.pushInHistory(this.content);
+                this.saveTextareaHistory();
             }, 5000);
         },
         methods: {
             /*
                 Toolbar' callbacks
             */
-            undo() {
-                this.content = this.fetchContentFromHistory(true);
+            getBranchFromHistory(isUndo) {
+                this.content = this.fetchContentFromHistory(isUndo);
             },
 
-            redo() {
-                this.content = this.fetchContentFromHistory(false);
-            },
-
-            bold() {
-                this.supplementFieldContent('**');
-            },
-
-            italic() {
-                this.supplementFieldContent('*');
-            },
-
-            strike() {
-                this.supplementFieldContent('~~');
-            },
-
-            supplementFieldContent(additionalSymbols) {
-                const refFieldStartPosition = this.$refs.field.selectionStart;
-                const refFieldEndPosition = this.$refs.field.selectionEnd;
-
-                if (refFieldStartPosition !== refFieldEndPosition){
-                    const substring = additionalSymbols + `${this.content.slice(refFieldStartPosition, refFieldEndPosition)}` + additionalSymbols;
-                    this.content = this.content.slice(0, refFieldStartPosition) + substring + this.content.slice(refFieldEndPosition, this.content.length);
+            applyFormat(additionalSymbols) {
+                if (this.$refs.field.selectionStart !== this.$refs.field.selectionEnd){
+                    const substring = additionalSymbols + `${this.selectedText}` + additionalSymbols;
+                    this.content = this.joinContentWithEditedText(substring);
                 } else 
                     this.content = additionalSymbols + `${this.content}` + additionalSymbols;
 
-                this.pushInHistory(this.content);
+                this.saveTextareaHistory();
             },
 
-            /*
-                Component' events
-            */
-            onInputHandler(event) {
-                this.content = event.target.value;
-                this.pushInHistory(this.content);
+            changeCase(toCase) {
+                let updatedContent = this.content;
+
+                switch (toCase) {
+                    case 'upper': {
+                        updatedContent = updatedContent.toUpperCase();
+                        break;
+                    }
+                    case 'lower': {
+                        updatedContent = updatedContent.toLowerCase();
+                        break;
+                    }
+                    default: console.error('Case for the content is not found'); break;
+                }
+
+                this.content = this.joinContentWithEditedText(updatedContent);
+                this.saveTextareaHistory();
             },
 
             /*
                 Component' functions
             */
-            pushInHistory(val) {
-                val = val.trim();
+            saveTextareaHistory() {
+                const val = this.content.trim();
 
                 if (val.length === 0 || this.historyStack.includes(val))
                     return;
@@ -132,8 +154,16 @@
                 this.currentIndexHistoryStack = this.historyStack.length - 1;
             },
 
-            executeToolCallback(callbackName) {
-                this[callbackName]();
+            joinContentWithEditedText(editedText) {
+                return this.content.slice(0, this.$refs.field.selectionStart) + editedText + this.content.slice(this.$refs.field.selectionEnd, this.content.length);
+            },
+
+            executeToolCallback(callback) {
+                if (typeof this[callback.name] !== 'function')
+                    return console.error('Method is not found: ' + callback.name);
+
+                const params = typeof callback['arguments'] !== "object" ? [] : callback.arguments;
+                this[callback.name].apply(this, params);
             },
 
             fetchContentFromHistory(isUndoAction = true) {
@@ -145,6 +175,11 @@
 
                 this.currentIndexHistoryStack = this.currentIndexHistoryStack - (isUndoAction ? 1 : -1);
                 return this.historyStack[this.currentIndexHistoryStack];
+            }
+        },
+        computed: {
+            selectedText: function() {
+                return this.content.slice(this.$refs.field.selectionStart, this.$refs.field.selectionEnd);
             }
         }
     }
