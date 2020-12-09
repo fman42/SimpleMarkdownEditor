@@ -17,7 +17,20 @@
 
     export default {
         name: 'SimpleMarkdown',
-        props: ['disabledTools'],
+        props: {
+            disabledTools: {
+                type: Array,
+                default: () => {
+                    return [];
+                }
+            },
+            autoSave: {
+                type: Number,
+                default: () => {
+                    return 5000;
+                }
+            }
+        },
         data() {
             return {
                 content: '',
@@ -31,9 +44,12 @@
             this.currentIndexHistoryStack = 0;
         },
         mounted() {
+            if (isNaN(this.autoSave))
+                return;
+
             setTimeout(() => {
                 this.saveTextareaHistory();
-            }, 5000);
+            }, this.autoSave);
         },
         methods: {
             /*
@@ -78,6 +94,10 @@
 
                 this.content = this.joinContentWithEditedText(updatedContent);
                 this.saveTextareaHistory();
+            },
+
+            clearArea() {
+                this.content = '';
             },
 
             /*

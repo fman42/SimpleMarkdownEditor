@@ -71,9 +71,9 @@
         {
             id: 'clear',
             name: 'Clear',
-            callback: () => {
-                this.content = '';
-                this.saveTextareaHistory();
+            callback: {
+                name: 'clearArea',
+                arguments: []
             }
         },
         {
