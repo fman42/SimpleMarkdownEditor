@@ -3,9 +3,11 @@
         <IconProvider></IconProvider>
         <ul>
             <li v-for="(item, index) in toolbar.filter(x => !disabledIdsTools.includes(x.id))" v-bind:key="index">
-                <svg class="icon" v-on:click="$emit('action', item.callback)">
-                    <use :xlink:href="getToolbarIconPath(item.id)" />
-                </svg>
+                <div class="toolbar__action">
+                    <svg class="icon" v-on:click="$emit('action', item.callback)">
+                        <use :xlink:href="getToolbarIconPath(item.id)" />
+                    </svg>
+                </div>
             </li>
         </ul>
     </section>
@@ -176,21 +178,29 @@
         width: 20px;
         height: 20px;
         fill: #B1B4B6;
+    }
+
+    .toolbar__action {
+        width: 32px;
+        height: 32px;
         margin: 0px 10px;
-    }
-
-    .icon:hover {
-        border: 1px solid #DBE1E3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         border-radius: 5px;
+    }
+
+    .toolbar__action:hover {
+        border: 1px solid #DBE1E3;
         cursor: pointer;
-        border-spacing: 7px 11px;
     }
 
-    .icon--active {
+    .toolbar__action--active {
         fill: #61A4F1;
+        border: 1px solid #61A4F1;
     }
 
-    .icon--disabled {
+    .toolbar__action--disabled {
         fill: #EFEFEF;
     }
 
