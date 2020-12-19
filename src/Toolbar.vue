@@ -176,12 +176,27 @@
         width: 20px;
         height: 20px;
         fill: #B1B4B6;
+        margin: 0px 10px;
+    }
+
+    .icon:hover {
+        border: 1px solid #DBE1E3;
+        border-radius: 5px;
         cursor: pointer;
-        margin: 0px 5px;
+        border-spacing: 7px 11px;
+    }
+
+    .icon--active {
+        fill: #61A4F1;
+    }
+
+    .icon--disabled {
+        fill: #EFEFEF;
     }
 
     .simple-markdown__toolbar {
         padding: 15px;
+        height: 30px;
         border-bottom: 2px solid #F2F4F5;
     }
 
