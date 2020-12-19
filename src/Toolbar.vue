@@ -1,16 +1,19 @@
 <template>
     <section class="simple-markdown__toolbar" id="toolbar">
+        <IconProvider></IconProvider>
         <ul>
             <li v-for="(item, index) in toolbar.filter(x => !disabledIdsTools.includes(x.id))" v-bind:key="index">
-                <button v-on:click="$emit('action', item.callback)">
-                    {{ item.name }}
-                </button>
+                <svg class="icon" v-on:click="$emit('action', item.callback)">
+                    <use :xlink:href="getToolbarIconPath(item.id)" />
+                </svg>
             </li>
         </ul>
     </section>
 </template>
 
 <script>
+    import IconProvider from './Providers/IconProvider';
+
     const toolbar = [
         {
             id: 'undo',
@@ -45,7 +48,7 @@
             }
         },
         {
-            id: 'strike',
+            id: 'strikethrough',
             name: 'Strikethrough',
             callback: {
                 name: 'applyFormat',
@@ -156,11 +159,32 @@
             toolbar: function () {
                 return toolbar;
             }
+        },
+        methods: {
+            getToolbarIconPath(toolbarId) {
+                return '#' + toolbarId;
+            }
+        },
+        components: {
+            IconProvider
         }
     }
 </script>
 
 <style scoped>
+    .icon {
+        width: 20px;
+        height: 20px;
+        fill: #B1B4B6;
+        cursor: pointer;
+        margin: 0px 5px;
+    }
+
+    .simple-markdown__toolbar {
+        padding: 15px;
+        border-bottom: 2px solid #F2F4F5;
+    }
+
     .simple-markdown__toolbar > ul {
         margin: 0px;
         padding: 0px;

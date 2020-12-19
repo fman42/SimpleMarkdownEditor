@@ -153,9 +153,8 @@
 
 <style scoped>
     .simple-markdown {
-        width: 45%;
-        background-color: #eff3f7;
-        border-radius: 5px;
+        background-color: #ffffff;
+        border-radius: 10px;
     }
 
     .simple-markdown__field {
