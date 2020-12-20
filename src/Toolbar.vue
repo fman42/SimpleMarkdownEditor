@@ -1,15 +1,18 @@
 <template>
-    <section class="simple-markdown__toolbar" id="toolbar">
+    <section class="toolbar" id="toolbar">
         <IconProvider></IconProvider>
-        <ul>
-            <li v-for="(item, index) in toolbar" v-bind:key="index">
-                <div class="toolbar__action" v-bind:class="getToolbarStyles(item)">
-                    <svg class="icon" v-on:click="callToolbarTool(item)">
-                        <use :xlink:href="getToolbarIconPath(item.id)" />
-                    </svg>
-                </div>
-            </li>
-        </ul>
+        <div class="toolbar__group" v-for="(toolbarGroup, index) in toolbar" v-bind:key="index">
+            <ul>
+                <li v-for="item in toolbarGroup" v-bind:key="item.id">
+                    <div class="toolbar__action" v-bind:class="getToolbarStyles(item)">
+                        <svg class="icon" v-on:click="callToolbarTool(item)">
+                            <use :xlink:href="getToolbarIconPath(item.id)" />
+                        </svg>
+                    </div>
+                </li>
+            </ul>
+            <div class="toolbar__group__separrator" v-if="index + 1 !== toolbar.length"></div>
+        </div>
     </section>
 </template>
 
@@ -17,126 +20,132 @@
     import IconProvider from './Providers/IconProvider';
 
     const toolbar = [
-        {
-            id: 'undo',
-            name: 'Undo',
-            callback: {
-                name: 'getBranchFromHistory',
-                arguments: [true]
+        [
+            {
+                id: 'undo',
+                name: 'Undo',
+                callback: {
+                    name: 'getBranchFromHistory',
+                    arguments: [true]
+                }
+            },
+            {
+                id: 'redo',
+                name: 'Redo',
+                callback: {
+                    name: 'getBranchFromHistory',
+                    arguments: [false]
+                }
+            },
+        ],
+        [
+            {
+                id: 'bold',
+                name: 'Bold',
+                callback: {
+                    name: 'applyFormat',
+                    arguments: ['**']
+                }
+            },
+            {
+                id: 'italic',
+                name: 'Italic',
+                callback: {
+                    name: 'applyFormat',
+                    arguments: ['*']
+                }
+            },
+            {
+                id: 'strikethrough',
+                name: 'Strikethrough',
+                callback: {
+                    name: 'applyFormat',
+                    arguments: ['~~']
+                }
+            },
+            {
+                id: 'toUpper',
+                name: 'ToUpper',
+                callback: {
+                    name: 'changeCase',
+                    arguments: ['upper']
+                }
+            },
+            {
+                id: 'toLower',
+                name: 'ToLower',
+                callback: {
+                    name: 'changeCase',
+                    arguments: ['lower']
+                }
+            },
+        ],
+        [
+            {
+                id: 'clear',
+                name: 'Clear',
+                callback: {
+                    name: 'clearArea',
+                    arguments: []
+                }
+            },
+            {
+                id: 'heading1',
+                name: 'Heading 1',
+                callback: {
+                    name: 'applyHeading',
+                    arguments: ['#']
+                }
+            },
+            {
+                id: 'heading2',
+                name: 'Heading 2',
+                callback: {
+                    name: 'applyHeading',
+                    arguments: ['##']
+                }
+            },
+            {
+                id: 'heading3',
+                name: 'Heading 3',
+                callback: {
+                    name: 'applyHeading',
+                    arguments: ['###']
+                }
+            },
+            {
+                id: 'heading4',
+                name: 'Heading 4',
+                callback: {
+                    name: 'applyHeading',
+                    arguments: ['####']
+                }
+            },
+            {
+                id: 'heading5',
+                name: 'Heading 5',
+                callback: {
+                    name: 'applyHeading',
+                    arguments: ['#####']
+                }
+            },
+            {
+                id: 'heading6',
+                name: 'Heading 6',
+                callback: {
+                    name: 'applyHeading',
+                    arguments: ['######']
+                }
+            },
+            {
+                id: 'information',
+                name: 'Information',
+                callback: {
+                    name: 'showInformationModal',
+                    arguments: []
+                }
             }
-        },
-        {
-            id: 'redo',
-            name: 'Redo',
-            callback: {
-                name: 'getBranchFromHistory',
-                arguments: [false]
-            }
-        },
-        {
-            id: 'bold',
-            name: 'Bold',
-            callback: {
-                name: 'applyFormat',
-                arguments: ['**']
-            }
-        },
-        {
-            id: 'italic',
-            name: 'Italic',
-            callback: {
-                name: 'applyFormat',
-                arguments: ['*']
-            }
-        },
-        {
-            id: 'strikethrough',
-            name: 'Strikethrough',
-            callback: {
-                name: 'applyFormat',
-                arguments: ['~~']
-            }
-        },
-        {
-            id: 'toUpper',
-            name: 'ToUpper',
-            callback: {
-                name: 'changeCase',
-                arguments: ['upper']
-            }
-        },
-        {
-            id: 'toLower',
-            name: 'ToLower',
-            callback: {
-                name: 'changeCase',
-                arguments: ['lower']
-            }
-        },
-        {
-            id: 'clear',
-            name: 'Clear',
-            callback: {
-                name: 'clearArea',
-                arguments: []
-            }
-        },
-        {
-            id: 'heading1',
-            name: 'Heading 1',
-            callback: {
-                name: 'applyHeading',
-                arguments: ['#']
-            }
-        },
-        {
-            id: 'heading2',
-            name: 'Heading 2',
-            callback: {
-                name: 'applyHeading',
-                arguments: ['##']
-            }
-        },
-        {
-            id: 'heading3',
-            name: 'Heading 3',
-            callback: {
-                name: 'applyHeading',
-                arguments: ['###']
-            }
-        },
-        {
-            id: 'heading4',
-            name: 'Heading 4',
-            callback: {
-                name: 'applyHeading',
-                arguments: ['####']
-            }
-        },
-        {
-            id: 'heading5',
-            name: 'Heading 5',
-            callback: {
-                name: 'applyHeading',
-                arguments: ['#####']
-            }
-        },
-        {
-            id: 'heading6',
-            name: 'Heading 6',
-            callback: {
-                name: 'applyHeading',
-                arguments: ['######']
-            }
-        },
-        {
-            id: 'information',
-            name: 'Information',
-            callback: {
-                name: 'showInformationModal',
-                arguments: []
-            }
-        }
+        ]
     ];
 
     export default {
@@ -191,6 +200,16 @@
         height: 20px;
     }
 
+    .toolbar {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .toolbar__group {
+        display: flex;
+        flex-direction: row;
+    }
+
     .toolbar__action {
         width: 32px;
         height: 32px;
@@ -216,13 +235,19 @@
         fill: #EFEFEF;
     }
 
-    .simple-markdown__toolbar {
+    .toolbar__group__separrator {
+        width: 1px;
+        background-color: #F2F4F5;
+        margin: 0px 20px;
+    }
+
+    .toolbar {
         padding: 15px;
         height: 30px;
         border-bottom: 2px solid #F2F4F5;
     }
 
-    .simple-markdown__toolbar > ul {
+    .toolbar__group > ul {
         margin: 0px;
         padding: 0px;
         list-style: none;
