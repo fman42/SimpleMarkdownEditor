@@ -161,7 +161,7 @@
         resize: none;
         border: none;
         outline: none;
-        padding: 5px;
+        padding: 20px 20px 15px 20px;
         width: 100%;
         height: 100px;
     }

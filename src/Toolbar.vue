@@ -196,8 +196,8 @@
 
 <style scoped>
     .icon {
-        width: 20px;
-        height: 20px;
+        width: 16px;
+        height: 16px;
     }
 
     .toolbar {
@@ -211,9 +211,9 @@
     }
 
     .toolbar__action {
-        width: 32px;
-        height: 32px;
-        margin: 0px 10px;
+        width: 30px;
+        height: 30px;
+        margin: 0px 5px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -252,5 +252,6 @@
         padding: 0px;
         list-style: none;
         display: flex;
+        align-items: center;
     }
 </style>
