@@ -2,9 +2,9 @@
     <section class="simple-markdown__toolbar" id="toolbar">
         <IconProvider></IconProvider>
         <ul>
-            <li v-for="(item, index) in toolbar.filter(x => !disabledIdsTools.includes(x.id))" v-bind:key="index">
-                <div class="toolbar__action">
-                    <svg class="icon" v-on:click="$emit('action', item.callback)">
+            <li v-for="(item, index) in toolbar" v-bind:key="index">
+                <div class="toolbar__action" v-bind:class="getToolbarStyles(item)">
+                    <svg class="icon" v-on:click="callToolbarTool(item)">
                         <use :xlink:href="getToolbarIconPath(item.id)" />
                     </svg>
                 </div>
@@ -151,7 +151,8 @@
         },
         data() {
             return {
-                disabledIdsTools: []
+                disabledIdsTools: [],
+                activeToolbarTools: null
             }
         },
         mounted() {
@@ -165,6 +166,17 @@
         methods: {
             getToolbarIconPath(toolbarId) {
                 return '#' + toolbarId;
+            },
+
+            getToolbarStyles(item) {
+                return {
+                    'toolbar__action--active': item.id == this.activeToolbarTools,
+                    'toolbar__action--disabled': this.disabledIdsTools.includes(item.id)
+                }
+            },
+
+            callToolbarTool(item) {
+                this.$emit('action', item.callback);
             }
         },
         components: {
@@ -177,7 +189,6 @@
     .icon {
         width: 20px;
         height: 20px;
-        fill: #B1B4B6;
     }
 
     .toolbar__action {
@@ -188,6 +199,7 @@
         align-items: center;
         justify-content: center;
         border-radius: 5px;
+        fill: #B1B4B6;
     }
 
     .toolbar__action:hover {
