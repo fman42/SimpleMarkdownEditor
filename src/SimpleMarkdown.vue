@@ -198,9 +198,10 @@
     .editor__separrator {
         background-color: #F2F4F5;
         width: 2px;
-        position: relative;
+        position: absolute;
+        left: 50%;
         cursor: col-resize;
-        min-height: 100%;
+        height: calc(100vh - 70px);
     }
 
     .editor__preview {
@@ -211,5 +212,6 @@
         display: flex;
         flex-direction: row;
         padding: 0px 20px;
+        position: relative;
     }
 </style>
