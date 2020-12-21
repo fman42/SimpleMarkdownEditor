@@ -219,6 +219,7 @@
         justify-content: center;
         border-radius: 5px;
         fill: #B1B4B6;
+        box-sizing: border-box;
     }
 
     .toolbar__action:hover {

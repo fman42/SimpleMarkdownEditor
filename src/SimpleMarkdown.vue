@@ -3,9 +3,17 @@
         <!-- Toolbar -->
         <Toolbar :disabledTools="disabledTools" v-on:action="executeToolCallback"></Toolbar>
         <!-- Field -->
-        <textarea class="simple-markdown__field" ref="field" v-on:change="saveTextareaHistory()" v-model="content">
-            
-        </textarea>
+        <div class="editor">
+            <textarea class="simple-markdown__field" ref="field" v-on:change="saveTextareaHistory()" v-model="content">
+                
+            </textarea>
+            <div class="editor__separrator">
+
+            </div>
+            <div class="editor__preview">
+
+            </div>
+        </div>
         <!-- Modals -->
         <InformationModal v-show="modalsVisible.information"></InformationModal>
     </div>
@@ -161,8 +169,47 @@
         resize: none;
         border: none;
         outline: none;
-        padding: 20px 20px 15px 20px;
-        width: 100%;
+        width: 50%;
         height: 100px;
+    }
+
+    .editor__separrator::before {
+        position: absolute;
+        content: "";
+        right: 7px;
+        top: 50%;
+        display: block;
+        width: 1px;
+        height: 30px;
+        background-color: #E1E5E7;
+    }
+
+    .editor__separrator::after {
+        position: absolute;
+        content: "";
+        left: 7px;
+        top: 50%;
+        display: block;
+        width: 1px;
+        height: 30px;
+        background-color: #E1E5E7;
+    }
+
+    .editor__separrator {
+        background-color: #F2F4F5;
+        width: 2px;
+        position: relative;
+        cursor: col-resize;
+        min-height: 100%;
+    }
+
+    .editor__preview {
+        width: 50%;
+    }
+
+    .editor {
+        display: flex;
+        flex-direction: row;
+        padding: 0px 20px;
     }
 </style>
