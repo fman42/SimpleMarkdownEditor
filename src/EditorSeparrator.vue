@@ -21,7 +21,7 @@
             return {
                 canMove: undefined,
                 mousePosition: undefined,
-                borderSize: 18,
+                borderSize: 22,
                 widthSeparrator: NaN
             }
         },
