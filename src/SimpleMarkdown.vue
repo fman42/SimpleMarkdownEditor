@@ -7,11 +7,9 @@
             <textarea class="simple-markdown__field" ref="field" v-on:change="saveTextareaHistory()" v-model="content">
                 
             </textarea>
-            <div class="editor__separrator">
-
-            </div>
-            <div class="editor__preview">
-
+            <EditorSeparrator v-on:changeX="changeEditorPreviewWidth"></EditorSeparrator>
+            <div class="editor__preview" v-bind:style="{width: editorPreviewWidth + 'px'}">
+                {{ content }}
             </div>
         </div>
         <!-- Modals -->
@@ -22,26 +20,28 @@
 <script>
     import Toolbar from './Toolbar.vue';
     import InformationModal from './Modals/Information.vue';
+    import EditorSeparrator from './EditorSeparrator.vue';
 
     export default {
         name: 'SimpleMarkdown',
         props: {
             disabledTools: {
                 type: Array,
-                default: () => {
-                    return [];
-                }
+                default: () => []
             },
             autoSave: {
                 type: Number,
-                default: () => {
-                    return 5000;
-                }
+                default: () => 5000
+            },
+            resize: {
+                type: Boolean,
+                default: () => true
             }
         },
         data() {
             return {
                 content: '',
+                editorPreviewWidth: NaN,
                 modalsVisible: {
                     information: false
                 }
@@ -54,6 +54,8 @@
         mounted() {
             if (isNaN(this.autoSave))
                 return;
+
+            this.editorPreviewWidth = window.outerWidth / 2;
 
             setTimeout(() => {
                 this.saveTextareaHistory();
@@ -111,6 +113,10 @@
             /*
                 Component' functions
             */
+            changeEditorPreviewWidth(val) {
+                this.editorPreviewWidth = val;
+            },
+
             saveTextareaHistory() {
                 const val = this.content.trim();
 
@@ -154,15 +160,25 @@
         },
         components: {
             Toolbar,
-            InformationModal
+            InformationModal,
+            EditorSeparrator
         }
     }
 </script>
 
 <style scoped>
+    textarea {
+        font-family: inherit;
+        font-size: inherit;
+    }
+
     .simple-markdown {
         background-color: #ffffff;
         border-radius: 10px;
+    }
+
+    .simple-markdown__field, .editor__preview {
+        margin-top: 20px;
     }
 
     .simple-markdown__field {
@@ -171,6 +187,7 @@
         outline: none;
         width: 50%;
         height: 100px;
+        padding: 0px;
     }
 
     .editor__separrator::before {
@@ -204,8 +221,14 @@
         height: calc(100vh - 70px);
     }
 
+    .editor__separrator--disabled {
+        cursor: not-allowed;
+    }
+
     .editor__preview {
         width: 50%;
+        margin-left: 20px;
+        word-break: break-all;
     }
 
     .editor {
