@@ -7,10 +7,12 @@
             <textarea class="simple-markdown__field" ref="field" v-on:change="saveTextareaHistory()" v-model="content">
                 
             </textarea>
-            <EditorSeparrator v-on:changeX="changeEditorPreviewWidth"></EditorSeparrator>
-            <div class="editor__preview" v-bind:style="{width: editorPreviewWidth + 'px'}">
-                {{ content }}
-            </div>
+            <section class="preview" v-if="preview">
+                <EditorSeparrator v-on:changeX="changeEditorPreviewWidth"></EditorSeparrator>
+                <div class="editor__preview" v-bind:style="{width: editorPreviewWidth + 'px'}">
+                    {{ content }}
+                </div>
+            </section>
         </div>
         <!-- Modals -->
         <InformationModal v-show="modalsVisible.information"></InformationModal>
@@ -34,6 +36,10 @@
                 default: () => 5000
             },
             resize: {
+                type: Boolean,
+                default: () => true
+            },
+            preview: {
                 type: Boolean,
                 default: () => true
             }

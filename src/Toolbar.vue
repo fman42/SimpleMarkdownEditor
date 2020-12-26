@@ -136,14 +136,6 @@
                     name: 'applyHeading',
                     arguments: ['######']
                 }
-            },
-            {
-                id: 'information',
-                name: 'Information',
-                callback: {
-                    name: 'showInformationModal',
-                    arguments: []
-                }
             }
         ]
     ];
