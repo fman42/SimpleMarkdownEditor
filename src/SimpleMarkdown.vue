@@ -3,25 +3,22 @@
         <!-- Toolbar -->
         <Toolbar :disabledTools="disabledTools" v-on:action="executeToolCallback"></Toolbar>
         <!-- Field -->
-        <div class="editor">
-            <textarea class="simple-markdown__field" ref="field" v-on:change="saveTextareaHistory()" v-model="content">
+        <div class="editor" ref="editor">
+            <textarea class="simple-markdown__field" v-bind:style="fetchEditorFreeSpace" ref="field" v-on:change="saveTextareaHistory()" v-model="content">
                 
             </textarea>
             <section class="preview" v-if="preview">
-                <EditorSeparrator v-on:changeX="changeEditorPreviewWidth"></EditorSeparrator>
-                <div class="editor__preview" v-bind:style="{width: editorPreviewWidth + 'px'}">
+                <EditorSeparrator v-on:changeDelta="changeEditorPreviewWidth" ref="separrator"></EditorSeparrator>
+                <div class="editor__preview">
                     {{ content }}
                 </div>
             </section>
         </div>
-        <!-- Modals -->
-        <InformationModal v-show="modalsVisible.information"></InformationModal>
     </div>
 </template>
 
 <script>
     import Toolbar from './Toolbar.vue';
-    import InformationModal from './Modals/Information.vue';
     import EditorSeparrator from './EditorSeparrator.vue';
 
     export default {
@@ -47,7 +44,8 @@
         data() {
             return {
                 content: '',
-                editorPreviewWidth: NaN,
+                editorAreaWidth: NaN,
+                parentWidth: NaN,
                 modalsVisible: {
                     information: false
                 }
@@ -58,16 +56,27 @@
             this.currentIndexHistoryStack = 0;
         },
         mounted() {
+            this.editorAreaWidth = this.preview ? 50 : 100;
+
             if (isNaN(this.autoSave))
                 return;
-
-            this.editorPreviewWidth = window.outerWidth / 2;
 
             setTimeout(() => {
                 this.saveTextareaHistory();
             }, this.autoSave);
+
+            // Init base events
+            this.getEditorWidth();
+            
+            window.addEventListener('resize', () => {
+                this.getEditorWidth();
+            });
         },
         methods: {
+            getEditorWidth() {
+                this.parentWidth = this.$refs.editor.clientWidth;
+            },
+
             /*
                 Toolbar' callbacks
             */
@@ -119,8 +128,16 @@
             /*
                 Component' functions
             */
-            changeEditorPreviewWidth(val) {
-                this.editorPreviewWidth = val;
+            changeEditorPreviewWidth(delta) {
+                const deltaPercent = (100 * delta) / this.parentWidth; 
+
+                if (this.editorAreaWidth + deltaPercent < 30)
+                {
+                    this.$refs.separrator.blockMove();
+                    return;
+                }
+
+                this.editorAreaWidth += deltaPercent;
             },
 
             saveTextareaHistory() {
@@ -162,11 +179,16 @@
         computed: {
             selectedText: function() {
                 return this.content.slice(this.$refs.field.selectionStart, this.$refs.field.selectionEnd);
+            },
+
+            fetchEditorFreeSpace: function () {
+                return {
+                    width: `${this.editorAreaWidth}%`
+                }
             }
         },
         components: {
             Toolbar,
-            InformationModal,
             EditorSeparrator
         }
     }
@@ -196,51 +218,17 @@
         padding: 0px;
     }
 
-    .editor__separrator::before {
-        position: absolute;
-        content: "";
-        right: 7px;
-        top: 50%;
-        display: block;
-        width: 1px;
-        height: 30px;
-        background-color: #E1E5E7;
-    }
-
-    .editor__separrator::after {
-        position: absolute;
-        content: "";
-        left: 7px;
-        top: 50%;
-        display: block;
-        width: 1px;
-        height: 30px;
-        background-color: #E1E5E7;
-    }
-
-    .editor__separrator {
-        background-color: #F2F4F5;
-        width: 2px;
-        position: absolute;
-        left: 50%;
-        cursor: col-resize;
-        height: calc(100vh - 70px);
-    }
-
     .editor__separrator--disabled {
         cursor: not-allowed;
     }
 
     .editor__preview {
-        width: 50%;
-        margin-left: 20px;
         word-break: break-all;
     }
 
     .editor {
         display: flex;
         flex-direction: row;
-        padding: 0px 20px;
         position: relative;
     }
 </style>

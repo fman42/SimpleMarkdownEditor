@@ -1,6 +1,6 @@
 <template>
-    <div class="editor__separrator" v-bind:style="{left: widthSeparrator + 'px'}"
-        v-bind:class="{'editor__separrator--disabled': resize === false}"
+    <div class="editor__separrator"
+        v-bind:class="separratorClasses"
         v-on:mouseup="disableMouseMove()"
         v-on:mousedown="enableMouseMove($event)"
         v-on:mousemove="changeBorder($event)">
@@ -21,12 +21,9 @@
             return {
                 canMove: undefined,
                 mousePosition: undefined,
-                borderSize: 22,
-                widthSeparrator: NaN
+                borderSize: 25,
+                blockedMove: false
             }
-        },
-        mounted() {
-            this.widthSeparrator = window.outerWidth / 2;
         },
         methods: {
             disableMouseMove() {
@@ -45,12 +42,78 @@
                 if (!this.canMove)
                     return;
 
-                const deltaX = this.mousePosition - event.x;
+                this.blockedMove = false;
+                const deltaX = (this.mousePosition - event.x);
+                if (Math.abs(deltaX) > 4)
+                {
+                    this.canMove = false;
+                    return;
+                }
+
                 this.mousePosition = event.x;
 
-                this.widthSeparrator += deltaX * -1;
-                this.$emit('changeX', this.mousePosition);
+                this.$emit('changeDelta', deltaX * -1);
+            },
+
+            blockMove() {
+                this.blockedMove = true;
+            }
+        },
+        computed: {
+            separratorClasses: function () {
+                return {
+                    'editor__separrator--disabled': this.resize === false, 
+                    'editor__separrator--active': this.canMove,
+                    'editor__separrator--blocked': this.blockedMove
+                }
             }
         }
     }
 </script>
+
+<style scoped>
+    .editor__separrator::before {
+        position: absolute;
+        content: "";
+        right: 0px;
+        top: 50%;
+        display: block;
+        width: 12px;
+        height: 30px;
+        background-color: transparent;
+        border-left: 1px solid #BDC9CF;
+    }
+
+    .editor__separrator::after {
+        position: absolute;
+        content: "";
+        left: 0px;
+        top: 50%;
+        display: block;
+        width: 12px;
+        height: 30px;
+        background-color: transparent;
+        border-right: 1px solid #BDC9CF;
+    }
+
+    .editor__separrator {
+        background-color: #F2F4F5;
+        width: 2px;
+        position: relative;
+        display: block;
+        cursor: col-resize;
+        height: calc(100vh - 70px);
+    }
+
+    .editor__separrator--blocked {
+        cursor: not-allowed;
+    }
+
+    .editor__separrator--active::before {
+        border-left: 1px solid #61A3F1;
+    }
+
+    .editor__separrator--active::after {
+        border-right: 1px solid #61A3F1;
+    }
+</style>
