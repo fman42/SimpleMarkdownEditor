@@ -3,7 +3,7 @@
         <IconProvider></IconProvider>
         <div class="toolbar__group" v-for="(toolbarGroup, index) in toolbar" v-bind:key="index">
             <ul>
-                <li v-for="item in toolbarGroup" v-bind:key="item.id">
+                <li v-for="item in toolbarGroup" v-bind:key="item.id" class="toolbar__item">
                     <div class="toolbar__action" @mouseover="enableTooltip($event)" @mouseleave="disableTooltip($event)"
                         v-bind:class="getToolbarStyles(item)" :data-label="item.name">
                         <svg class="icon" v-on:click="callToolbarTool(item)">
@@ -201,6 +201,15 @@
         height: 16px;
     }
 
+    .toolbar__item {
+        width: 30px;
+        margin-right: 5px;
+    }
+
+    .toolbar__item:last-child {
+        margin-right: 0px;
+    }
+
     .toolbar__tooltip {
         position: relative;
     }
@@ -244,7 +253,6 @@
     .toolbar__action {
         width: 30px;
         height: 30px;
-        margin: 0px 10px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -269,12 +277,13 @@
 
     .toolbar__group__separrator {
         width: 1px;
+        height: 30px;
         background-color: #F2F4F5;
         margin: 0px 20px;
     }
 
     .toolbar {
-        padding: 25px 15px;
+        padding: 10px 20px;
         height: 30px;
         border-bottom: 2px solid #F2F4F5;
     }
