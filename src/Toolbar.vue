@@ -4,7 +4,8 @@
         <div class="toolbar__group" v-for="(toolbarGroup, index) in toolbar" v-bind:key="index">
             <ul>
                 <li v-for="item in toolbarGroup" v-bind:key="item.id">
-                    <div class="toolbar__action" v-bind:class="getToolbarStyles(item)">
+                    <div class="toolbar__action" @mouseover="enableTooltip($event)" @mouseleave="disableTooltip($event)"
+                        v-bind:class="getToolbarStyles(item)" :data-label="item.name">
                         <svg class="icon" v-on:click="callToolbarTool(item)">
                             <use :xlink:href="getToolbarIconPath(item.id)" />
                         </svg>
@@ -176,6 +177,14 @@
                 }
             },
 
+            enableTooltip(event) {
+                event.target.classList.add('toolbar__tooltip');
+            },
+
+            disableTooltip(event) {
+                event.target.classList.remove('toolbar__tooltip');
+            },
+
             callToolbarTool(item) {
                 this.$emit('action', item.callback);
             }
@@ -192,6 +201,36 @@
         height: 16px;
     }
 
+    .toolbar__tooltip {
+        position: relative;
+    }
+
+    .toolbar__tooltip::before {
+        display: block;
+        position: absolute;
+        top: -23px;
+        content: attr(data-label);
+        font-size: 14px;
+        width: 40px;
+        height: 20px;
+        background-color: rgba(0,0,0,0.5);
+        border-radius: 2px;
+        text-align: center;
+        color: #FFFFFF;
+    }
+
+    .toolbar__tooltip::after {
+        width: 0;
+        height: 0;
+        position: absolute;
+        top: -3px;
+        content: "";
+        display: block;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 6px solid rgba(0,0,0,0.5);
+    }
+
     .toolbar {
         display: flex;
         flex-direction: row;
@@ -205,7 +244,7 @@
     .toolbar__action {
         width: 30px;
         height: 30px;
-        margin: 0px 5px;
+        margin: 0px 10px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -235,7 +274,7 @@
     }
 
     .toolbar {
-        padding: 15px;
+        padding: 25px 15px;
         height: 30px;
         border-bottom: 2px solid #F2F4F5;
     }
