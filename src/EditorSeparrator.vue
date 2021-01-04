@@ -80,6 +80,7 @@
         display: block;
         width: 12px;
         height: 30px;
+        z-index: 9999;
         background-color: transparent;
         border-left: 1px solid #BDC9CF;
     }
@@ -92,6 +93,7 @@
         display: block;
         width: 12px;
         height: 30px;
+        z-index: 9999;
         background-color: transparent;
         border-right: 1px solid #BDC9CF;
     }

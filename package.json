@@ -19,5 +19,8 @@
     "js"
   ],
   "author": "fman42",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "markdown": "^0.5.0"
+  }
 }

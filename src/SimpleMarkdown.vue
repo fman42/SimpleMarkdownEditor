@@ -4,13 +4,13 @@
         <Toolbar :disabledTools="disabledTools" v-on:action="executeToolCallback"></Toolbar>
         <!-- Field -->
         <div class="editor" ref="editor">
-            <textarea class="simple-markdown__field" v-bind:style="fetchEditorFreeSpace" ref="field" v-on:change="saveTextareaHistory()" v-model="content">
+            <textarea class="simple-markdown__field ml-10" v-bind:style="fetchEditorFreeSpace" ref="field" v-on:change="saveTextareaHistory()" v-model="content">
                 
             </textarea>
             <section class="preview" v-if="preview">
                 <EditorSeparrator v-on:changeDelta="changeEditorPreviewWidth" ref="separrator"></EditorSeparrator>
-                <div class="editor__preview">
-                    {{ content }}
+                <div class="editor__preview ml-10">
+                    <span v-html="convertContentToHTML"></span>
                 </div>
             </section>
         </div>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+    import {markdown} from 'markdown';
     import Toolbar from './Toolbar.vue';
     import EditorSeparrator from './EditorSeparrator.vue';
 
@@ -183,8 +184,12 @@
 
             fetchEditorFreeSpace: function () {
                 return {
-                    width: `${this.editorAreaWidth}%`
+                    minWidth: `${this.editorAreaWidth}%`
                 }
+            },
+
+            convertContentToHTML: function () {
+                return markdown.toHTML(this.content);
             }
         },
         components: {
@@ -205,8 +210,21 @@
         border-radius: 10px;
     }
 
+    .ml-10 {
+        margin-left: 10px;
+    }
+
+    .preview {
+        display: flex;
+    }
+
     .simple-markdown__field, .editor__preview {
         margin-top: 20px;
+    }
+
+    .editor__preview > p {
+        margin: 0px;
+        padding: 0px;
     }
 
     .simple-markdown__field {
@@ -214,21 +232,18 @@
         border: none;
         outline: none;
         width: 50%;
-        height: 100px;
         padding: 0px;
-    }
-
-    .editor__separrator--disabled {
-        cursor: not-allowed;
     }
 
     .editor__preview {
         word-break: break-all;
+        overflow: scroll;
     }
 
     .editor {
         display: flex;
         flex-direction: row;
         position: relative;
+        height: calc(100vh - 70px);
     }
 </style>

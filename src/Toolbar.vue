@@ -5,7 +5,7 @@
             <ul>
                 <li v-for="item in toolbarGroup" v-bind:key="item.id" class="toolbar__item">
                     <div class="toolbar__action" @mouseover="enableTooltip($event)" @mouseleave="disableTooltip($event)"
-                        v-bind:class="getToolbarStyles(item)" :data-label="item.name">
+                        v-bind:class="getToolbarStyles(item)" :data-label="item.description">
                         <svg class="icon" v-on:click="callToolbarTool(item)">
                             <use :xlink:href="getToolbarIconPath(item.id)" />
                         </svg>
@@ -24,7 +24,7 @@
         [
             {
                 id: 'undo',
-                name: 'Undo',
+                description: 'Undo',
                 callback: {
                     name: 'getBranchFromHistory',
                     arguments: [true]
@@ -32,7 +32,7 @@
             },
             {
                 id: 'redo',
-                name: 'Redo',
+                description: 'Redo',
                 callback: {
                     name: 'getBranchFromHistory',
                     arguments: [false]
@@ -42,7 +42,7 @@
         [
             {
                 id: 'bold',
-                name: 'Bold',
+                description: 'Bold',
                 callback: {
                     name: 'applyFormat',
                     arguments: ['**']
@@ -50,7 +50,7 @@
             },
             {
                 id: 'italic',
-                name: 'Italic',
+                description: 'Italic',
                 callback: {
                     name: 'applyFormat',
                     arguments: ['*']
@@ -58,7 +58,7 @@
             },
             {
                 id: 'strikethrough',
-                name: 'Strikethrough',
+                description: 'Strikethrough',
                 callback: {
                     name: 'applyFormat',
                     arguments: ['~~']
@@ -66,7 +66,7 @@
             },
             {
                 id: 'toUpper',
-                name: 'ToUpper',
+                description: 'To convert to uppercase',
                 callback: {
                     name: 'changeCase',
                     arguments: ['upper']
@@ -74,7 +74,7 @@
             },
             {
                 id: 'toLower',
-                name: 'ToLower',
+                description: 'To convert to lowercase',
                 callback: {
                     name: 'changeCase',
                     arguments: ['lower']
@@ -83,16 +83,8 @@
         ],
         [
             {
-                id: 'clear',
-                name: 'Clear',
-                callback: {
-                    name: 'clearArea',
-                    arguments: []
-                }
-            },
-            {
                 id: 'heading1',
-                name: 'Heading 1',
+                description: 'Heading 1',
                 callback: {
                     name: 'applyHeading',
                     arguments: ['#']
@@ -100,7 +92,7 @@
             },
             {
                 id: 'heading2',
-                name: 'Heading 2',
+                description: 'Heading 2',
                 callback: {
                     name: 'applyHeading',
                     arguments: ['##']
@@ -108,7 +100,7 @@
             },
             {
                 id: 'heading3',
-                name: 'Heading 3',
+                description: 'Heading 3',
                 callback: {
                     name: 'applyHeading',
                     arguments: ['###']
@@ -116,7 +108,7 @@
             },
             {
                 id: 'heading4',
-                name: 'Heading 4',
+                description: 'Heading 4',
                 callback: {
                     name: 'applyHeading',
                     arguments: ['####']
@@ -124,7 +116,7 @@
             },
             {
                 id: 'heading5',
-                name: 'Heading 5',
+                description: 'Heading 5',
                 callback: {
                     name: 'applyHeading',
                     arguments: ['#####']
@@ -132,10 +124,20 @@
             },
             {
                 id: 'heading6',
-                name: 'Heading 6',
+                description: 'Heading 6',
                 callback: {
                     name: 'applyHeading',
                     arguments: ['######']
+                }
+            }
+        ],
+        [
+            {
+                id: 'clear',
+                description: 'Clear',
+                callback: {
+                    name: 'clearArea',
+                    arguments: []
                 }
             }
         ]
@@ -215,14 +217,17 @@
     }
 
     .toolbar__tooltip::before {
-        display: block;
+        display: flex;
+        align-items: center;
         position: absolute;
-        top: -23px;
+        top: -26px;
         content: attr(data-label);
-        font-size: 14px;
-        width: 40px;
+        font-size: 13px;
+        width: max-content;
+        padding: 0px 7px;
         height: 20px;
-        background-color: rgba(0,0,0,0.5);
+        background-color: rgba(0,0,0,1);
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
         border-radius: 2px;
         text-align: center;
         color: #FFFFFF;
@@ -232,12 +237,12 @@
         width: 0;
         height: 0;
         position: absolute;
-        top: -3px;
+        top: -6px;
         content: "";
         display: block;
         border-left: 8px solid transparent;
         border-right: 8px solid transparent;
-        border-top: 6px solid rgba(0,0,0,0.5);
+        border-top: 6px solid rgba(0,0,0,1);
     }
 
     .toolbar {
@@ -276,14 +281,14 @@
     }
 
     .toolbar__group__separrator {
-        width: 1px;
-        height: 30px;
+        width: 2px;
+        height: 35px;
         background-color: #F2F4F5;
         margin: 0px 20px;
     }
 
     .toolbar {
-        padding: 10px 20px;
+        padding: 23px 20px;
         height: 30px;
         border-bottom: 2px solid #F2F4F5;
     }
