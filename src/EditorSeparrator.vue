@@ -8,6 +8,10 @@
 </template>
 
 <script>
+    const EDITOR_SEPARRATOR__DISABLED = 'editor__separrator--disabled';
+    const EDITOR_SEPARRATOR__ACTIVE = 'editor__separrator--active';
+    const EDITOR_SEPARRATOR__BLOCKED = 'editor__separrator--blocked';
+
     export default {
         name: "EditorSeparrator",
         props: {
@@ -60,11 +64,12 @@
         },
         computed: {
             separratorClasses: function () {
-                return {
-                    'editor__separrator--disabled': this.resize === false, 
-                    'editor__separrator--active': this.canMove,
-                    'editor__separrator--blocked': this.blockedMove
-                }
+                let styles = {};
+                styles[EDITOR_SEPARRATOR__DISABLED] = this.resize === false;
+                styles[EDITOR_SEPARRATOR__ACTIVE] = this.canMove;
+                styles[EDITOR_SEPARRATOR__BLOCKED] = this.blockedMove;
+
+                return styles;
             }
         }
     }
