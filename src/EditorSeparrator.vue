@@ -51,7 +51,6 @@
                 }
 
                 this.mousePosition = event.x;
-
                 this.$emit('changeDelta', deltaX * -1);
             },
 

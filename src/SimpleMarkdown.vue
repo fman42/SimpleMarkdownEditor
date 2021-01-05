@@ -237,7 +237,6 @@
 
     .editor__preview {
         word-break: break-all;
-        overflow: scroll;
     }
 
     .editor {
