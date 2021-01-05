@@ -4,14 +4,12 @@
         <Toolbar :disabledTools="disabledTools" v-on:action="executeToolCallback"></Toolbar>
         <!-- Field -->
         <div class="editor" ref="editor">
-            <textarea class="simple-markdown__field ml-10" v-bind:style="fetchEditorFreeSpace" ref="field" v-on:change="saveTextareaHistory()" v-model="content">
+            <textarea class="simple-markdown__field" v-bind:style="fetchEditorFreeSpace" ref="field" v-on:change="saveTextareaHistory()" v-model="content">
                 
             </textarea>
             <section class="preview" v-if="preview">
-                <EditorSeparrator v-on:changeDelta="changeEditorPreviewWidth" ref="separrator"></EditorSeparrator>
-                <div class="editor__preview ml-10">
-                    <span v-html="convertContentToHTML"></span>
-                </div>
+                <EditorSeparrator v-on:changeDelta="changeEditorPreviewWidth" :resize="resize" ref="separrator"></EditorSeparrator>
+                <div class="editor__preview ml-10" v-html="convertContentToHTML"></div>
             </section>
         </div>
     </div>
@@ -40,6 +38,10 @@
             preview: {
                 type: Boolean,
                 default: () => true
+            },
+            defaultContent: {
+                type: String,
+                default: () => ''
             }
         },
         data() {
@@ -58,6 +60,7 @@
         },
         mounted() {
             this.editorAreaWidth = this.preview ? 50 : 100;
+            this.content = this.defaultContent;
 
             if (isNaN(this.autoSave))
                 return;
@@ -74,6 +77,21 @@
             });
         },
         methods: {
+            /*
+                Public functions
+            */
+            toHTML() {
+                return markdown.toHTML(this.content);
+            },
+
+            toMarkdown() {
+                return this.content;
+            },
+
+            setContent(content) {
+                this.content = content;
+            },
+
             getEditorWidth() {
                 this.parentWidth = this.$refs.editor.clientWidth;
             },
@@ -93,10 +111,6 @@
                     this.content = additionalSymbols + `${this.content}` + additionalSymbols;
 
                 this.saveTextareaHistory();
-            },
-
-            showInformationModal() {
-                this.modalsVisible.information = !this.modalsVisible.information;
             },
 
             applyHeading(symbols) {
@@ -231,7 +245,6 @@
         resize: none;
         border: none;
         outline: none;
-        width: 50%;
         padding: 0px;
     }
 
@@ -243,6 +256,6 @@
         display: flex;
         flex-direction: row;
         position: relative;
-        height: calc(100vh - 70px);
+        height: 100%;
     }
 </style>

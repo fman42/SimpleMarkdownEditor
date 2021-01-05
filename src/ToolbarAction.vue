@@ -52,7 +52,7 @@
             },
 
             callToolbarTool(item) {
-                this.$emit('callAction', item.callback);
+                this.$emit('callAction', item);
             }
         }
     }

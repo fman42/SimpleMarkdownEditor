@@ -35,7 +35,7 @@
             },
 
             enableMouseMove(event) {
-                if (event.offsetX < this.borderSize)
+                if (event.offsetX < this.borderSize && this.resize)
                 {
                     this.mousePosition = event.x;
                     this.canMove = true;
@@ -65,9 +65,12 @@
         computed: {
             separratorClasses: function () {
                 let styles = {};
+
                 styles[EDITOR_SEPARRATOR__DISABLED] = this.resize === false;
-                styles[EDITOR_SEPARRATOR__ACTIVE] = this.canMove;
-                styles[EDITOR_SEPARRATOR__BLOCKED] = this.blockedMove;
+                if (this.resize) {
+                    styles[EDITOR_SEPARRATOR__ACTIVE] = this.canMove;
+                    styles[EDITOR_SEPARRATOR__BLOCKED] = this.blockedMove;
+                }
 
                 return styles;
             }
@@ -109,6 +112,10 @@
         display: block;
         cursor: col-resize;
         height: calc(100vh - 70px);
+    }
+
+    .editor__separrator--disabled {
+        cursor: default;
     }
 
     .editor__separrator--blocked {
