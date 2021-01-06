@@ -263,6 +263,7 @@
 
     .editor__preview {
         word-break: break-all;
+        overflow-y: scroll;
     }
 
     .editor {
