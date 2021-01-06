@@ -25,7 +25,7 @@
         props: {
             disabledTools: {
                 type: Array,
-                default: () => ['redo']
+                default: () => []
             },
             autoSave: {
                 type: Number,

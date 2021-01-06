@@ -34,14 +34,14 @@ export default [
                 arguments: ['*']
             }
         },
-        {
+        /*{
             id: 'strikethrough',
             description: 'Strikethrough',
             callback: {
                 name: 'applyFormat',
                 arguments: ['~~']
             }
-        },
+        },*/
         {
             id: 'toUpper',
             description: 'To convert to uppercase',
