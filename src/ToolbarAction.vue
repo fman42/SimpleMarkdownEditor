@@ -1,7 +1,8 @@
 <template>
-    <div class="toolbar__action" @mouseover="enableTooltip($event)" @mouseleave="disableTooltip($event)"
+    <div class="toolbar__action" @mouseover="enableTooltip($event)" 
+        @mouseleave="disableTooltip($event)" v-on:click="callToolbarTool(entity)"
         v-bind:class="getToolbarStyles(entity)" :data-label="entity.description">
-        <svg class="icon" v-on:click="callToolbarTool(entity)">
+        <svg class="icon">
             <use :xlink:href="getToolbarIconPath(entity.id)" />
         </svg>
     </div>
@@ -9,7 +10,6 @@
 
 <script>
     const TOOLBAR_TOOLTIP_CLASSNAME = 'toolbar__tooltip';
-    const TOOLBAR_ACTION__ACTIVE = 'toolbar__action--active';
     const TOOLBAR_ACTION__DISABLED = 'toolbar__action--disabled';
 
     export default {
@@ -35,9 +35,8 @@
                 return `#${itemId}`;
             },
 
-            getToolbarStyles(item) {
+            getToolbarStyles() {
                 let styles = {};
-                styles[TOOLBAR_ACTION__ACTIVE] = item.id === this.activeToolbarTools;
                 styles[TOOLBAR_ACTION__DISABLED] = this.disabled;
 
                 return styles;
@@ -52,6 +51,9 @@
             },
 
             callToolbarTool(item) {
+                if (this.disabled)
+                    return;
+
                 this.$emit('callAction', item);
             }
         }
@@ -78,6 +80,11 @@
     .toolbar__action:hover {
         border: 1px solid #DBE1E3;
         cursor: pointer;
+    }
+
+    .toolbar__action--disabled:hover {
+        border: none;
+        cursor: not-allowed;
     }
 
     .toolbar__action--active {

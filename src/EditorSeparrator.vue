@@ -111,7 +111,7 @@
         position: relative;
         display: block;
         cursor: col-resize;
-        height: calc(100vh - 70px);
+        height: calc(100vh - 78px);
     }
 
     .editor__separrator--disabled {

@@ -25,7 +25,7 @@
         props: {
             disabledTools: {
                 type: Array,
-                default: () => []
+                default: () => ['redo']
             },
             autoSave: {
                 type: Number,
@@ -65,7 +65,7 @@
             if (isNaN(this.autoSave))
                 return;
 
-            setTimeout(() => {
+            setInterval(() => {
                 this.saveTextareaHistory();
             }, this.autoSave);
 
@@ -104,21 +104,32 @@
             },
 
             applyFormat(additionalSymbols) {
-                if (this.$refs.field.selectionStart !== this.$refs.field.selectionEnd){
-                    const substring = additionalSymbols + `${this.selectedText}` + additionalSymbols;
-                    this.content = this.joinContentWithEditedText(substring);
-                } else 
-                    this.content = additionalSymbols + `${this.content}` + additionalSymbols;
+                const substring = additionalSymbols + `${this.selectedText}` + additionalSymbols;
 
+                this.insertAtCursor(substring);
                 this.saveTextareaHistory();
             },
 
             applyHeading(symbols) {
-                this.content = `${symbols} ${this.selectedText}`; 
+                this.insertAtCursor(`${symbols}`);
+                this.saveTextareaHistory();
+            },
+
+            insertAtCursor(val) {
+                if (this.$refs.field.selectionStart || this.$refs.field.selectionStart == '0') {
+                    const startPos = this.$refs.field.selectionStart;
+                    const endPos = this.$refs.field.selectionEnd;
+
+                    this.content = this.content.substring(0, startPos)
+                        + val
+                        + this.content.substring(endPos, this.content.length);
+                } else {
+                    this.content += val;
+                }
             },
 
             changeCase(toCase) {
-                let updatedContent = this.content;
+                let updatedContent = this.selectedText;
 
                 switch (toCase) {
                     case 'upper': {
@@ -138,6 +149,7 @@
 
             clearArea() {
                 this.content = '';
+                this.saveTextareaHistory();
             },
 
             /*
@@ -188,7 +200,7 @@
                 }
 
                 this.currentIndexHistoryStack = this.currentIndexHistoryStack - (isUndoAction ? 1 : -1);
-                return this.historyStack[this.currentIndexHistoryStack];
+                return this.historyStack[this.currentIndexHistoryStack] ?? '';
             }
         },
         computed: {
@@ -203,7 +215,7 @@
             },
 
             convertContentToHTML: function () {
-                return markdown.toHTML(this.content);
+                return markdown.toHTML(this.content ?? '');
             }
         },
         components: {
@@ -246,6 +258,7 @@
         border: none;
         outline: none;
         padding: 0px;
+        height: calc(100vh - 98px);
     }
 
     .editor__preview {
@@ -256,6 +269,6 @@
         display: flex;
         flex-direction: row;
         position: relative;
-        height: 100%;
+        height: calc(100vh - 98px);
     }
 </style>
