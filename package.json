@@ -1,8 +1,13 @@
 {
-  "name": "simple-markdown",
-  "version": "1.0.0",
+  "name": "@fman42/simple-markdown",
+  "version": "1.0.1",
   "description": "A simple markdown editor allowing use the markdown without some troubles",
-  "main": "index.js",
+  "main": "src/dist/SimpleMarkdownEditor.umd.js",
+  "module": "src/dist/SimpleMarkdownEditor.esm.js",
+  "unpkg": "src/dist/SimpleMarkdownEditor.min.js",
+  "browser": {
+    "./sfc": "src/SimpleMarkdown.vue"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,5 +27,14 @@
   "license": "MIT",
   "dependencies": {
     "markdown": "^0.5.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fman42/SimpleMarkdownEditor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fman42/SimpleMarkdownEditor/issues"
+  },
+  "homepage": "https://github.com/fman42/SimpleMarkdownEditor#readme"
 }
