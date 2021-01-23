@@ -58,6 +58,14 @@ export default [
                 arguments: ['lower']
             }
         },
+        {
+            id: 'quote',
+            description: 'Quote',
+            callback: {
+                name: 'applyFormatToLeft',
+                arguments: ['>']
+            }
+        },
     ],
     [
         {

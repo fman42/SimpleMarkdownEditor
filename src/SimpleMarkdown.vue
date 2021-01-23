@@ -111,6 +111,11 @@
                 this.saveTextareaHistory();
             },
 
+            applyFormatToLeft(additionalSymbols) {
+                this.insertAtCursor(`${additionalSymbols} ${this.selectedText}`);
+                this.saveTextareaHistory();
+            },
+
             applyHeading(symbols) {
                 this.insertAtCursor(`${symbols}`);
                 this.saveTextareaHistory();
