@@ -67,7 +67,6 @@
             },
 
             getHeight() {
-                console.log(this.fullscreen);
                 return {
                     height: !this.fullscreen ? 'calc(100vh - 78px)' : '100vh'
                 }
