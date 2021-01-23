@@ -117,6 +117,22 @@ export default [
                 name: 'clearArea',
                 arguments: []
             }
+        },
+        {
+            id: 'view',
+            description: 'View',
+            callback: {
+                name: 'switchVariableState',
+                arguments: ['preview']
+            }
+        },
+        {
+            id: 'fullscreen',
+            description: 'Disable or enable fullscreen',
+            callback: {
+                name: 'switchVariableState',
+                arguments: ['fullscreen']
+            }
         }
     ]
 ];

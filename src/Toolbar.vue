@@ -1,17 +1,22 @@
 <template>
-    <section class="toolbar" id="toolbar">
-        <IconProvider></IconProvider>
-        <div class="toolbar__group" v-for="(toolbarGroup, index) in toolbar" v-bind:key="index">
-            <ul>
-                <li class="toolbar__item" v-for="item in toolbarGroup" v-bind:key="item.id">
-                    <ToolbarAction :entity="item" 
-                        :disabled="disabledIdsTools.includes(item.id)" v-on:callAction="callToolbarTool">
-                    </ToolbarAction>
-                </li>
-            </ul>
-            <div class="toolbar__group__separrator" v-if="index + 1 !== toolbar.length"></div>
-        </div>
-    </section>
+    <div id="toolbar">
+        <section class="toolbar" v-if="show" id="toolbar">
+            <IconProvider></IconProvider>
+            <div class="toolbar__group" v-for="(toolbarGroup, index) in toolbar" v-bind:key="index">
+                <ul>
+                    <li class="toolbar__item" v-for="item in toolbarGroup" v-bind:key="item.id">
+                        <ToolbarAction :entity="item" 
+                            :disabled="disabledIdsTools.includes(item.id)" v-on:callAction="callToolbarTool">
+                        </ToolbarAction>
+                    </li>
+                </ul>
+                <div class="toolbar__group__separrator" v-if="index + 1 !== toolbar.length"></div>
+            </div>
+        </section>
+        <section v-else>
+           <ToolbarAction class="ff" :entity="getFullscreenItem" v-on:callAction="callToolbarTool"></ToolbarAction>
+        </section>
+    </div>
 </template>
 
 <script>
@@ -24,9 +29,11 @@
         props: {
             disabledTools: {
                 type: Array,
-                default: () => {
-                    return [];
-                }
+                default: () => []
+            },
+            show: {
+                type: Boolean,
+                default: () => true
             }
         },
         data() {
@@ -41,6 +48,11 @@
         computed: {
             toolbar: () => {
                 return Toolbar;
+            },
+
+            getFullscreenItem: function () {
+                const countOfItems = this.toolbar.length;
+                return this.toolbar[countOfItems - 1].filter(x => x.id === "fullscreen")[0];
             }
         },
         methods: {
@@ -59,6 +71,13 @@
     .toolbar__item {
         width: 30px;
         margin-right: 5px;
+    }
+
+    .toolbar_enable_fullscren_button {
+        display: flex;
+        justify-content: flex-end;
+        position: fixed;
+        z-index: 9999;
     }
 
     .toolbar__item:last-child {

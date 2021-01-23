@@ -1,7 +1,7 @@
 <template>
     <div class="simple-markdown" id="markdown_editor">
         <!-- Toolbar -->
-        <Toolbar :disabledTools="disabledTools" v-on:action="executeToolCallback"></Toolbar>
+        <Toolbar :disabledTools="disabledTools" v-on:action="executeToolCallback" :show="!fullscreen"></Toolbar>
         <!-- Field -->
         <div class="editor" ref="editor">
             <textarea class="simple-markdown__field" v-bind:style="fetchEditorFreeSpace" ref="field" v-on:change="saveTextareaHistory()" v-model="content">
@@ -51,7 +51,8 @@
                 parentWidth: NaN,
                 modalsVisible: {
                     information: false
-                }
+                },
+                fullscreen: false
             }
         },
         created() {
@@ -150,6 +151,10 @@
             clearArea() {
                 this.content = '';
                 this.saveTextareaHistory();
+            },
+
+            switchVariableState(variable) {
+                this[variable] = !this[variable];
             },
 
             /*
