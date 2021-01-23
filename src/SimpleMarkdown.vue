@@ -8,7 +8,7 @@
                 
             </textarea>
             <section class="preview" v-if="preview">
-                <EditorSeparrator v-on:changeDelta="changeEditorPreviewWidth" :resize="resize" ref="separrator"></EditorSeparrator>
+                <EditorSeparrator v-on:changeDelta="changeEditorPreviewWidth" :fullscreen="fullscreen" :resize="resize" ref="separrator"></EditorSeparrator>
                 <div class="editor__preview ml-10" v-html="convertContentToHTML"></div>
             </section>
         </div>

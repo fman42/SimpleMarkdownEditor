@@ -1,7 +1,7 @@
 <template>
     <div id="toolbar">
+        <IconProvider></IconProvider>
         <section class="toolbar" v-if="show" id="toolbar">
-            <IconProvider></IconProvider>
             <div class="toolbar__group" v-for="(toolbarGroup, index) in toolbar" v-bind:key="index">
                 <ul>
                     <li class="toolbar__item" v-for="item in toolbarGroup" v-bind:key="item.id">
@@ -13,8 +13,8 @@
                 <div class="toolbar__group__separrator" v-if="index + 1 !== toolbar.length"></div>
             </div>
         </section>
-        <section v-else>
-           <ToolbarAction class="ff" :entity="getFullscreenItem" v-on:callAction="callToolbarTool"></ToolbarAction>
+        <section class="toolbar_enable_fullscreen" v-else>
+           <ToolbarAction :entity="getFullscreenItem" v-on:callAction="callToolbarTool"></ToolbarAction>
         </section>
     </div>
 </template>
@@ -73,11 +73,11 @@
         margin-right: 5px;
     }
 
-    .toolbar_enable_fullscren_button {
-        display: flex;
-        justify-content: flex-end;
+    .toolbar_enable_fullscreen {
+        right: 100px;
         position: fixed;
-        z-index: 9999;
+        z-index: 1;
+        margin-top: 40px;
     }
 
     .toolbar__item:last-child {

@@ -1,5 +1,5 @@
 <template>
-    <div class="editor__separrator"
+    <div class="editor__separrator" v-bind:style="getHeight()"
         v-bind:class="separratorClasses"
         v-on:mouseup="disableMouseMove()"
         v-on:mousedown="enableMouseMove($event)"
@@ -18,6 +18,10 @@
             resize: {
                 type: Boolean,
                 default: () => true,
+                required: false
+            },
+            fullscreen: {
+                type: Boolean,
                 required: false
             }
         },
@@ -60,6 +64,13 @@
 
             blockMove() {
                 this.blockedMove = true;
+            },
+
+            getHeight() {
+                console.log(this.fullscreen);
+                return {
+                    height: !this.fullscreen ? 'calc(100vh - 78px)' : '100vh'
+                }
             }
         },
         computed: {
@@ -111,7 +122,6 @@
         position: relative;
         display: block;
         cursor: col-resize;
-        height: calc(100vh - 78px);
     }
 
     .editor__separrator--disabled {
