@@ -89,29 +89,25 @@
 </script>
 
 <style scoped>
-    .editor__separrator::before {
-        position: absolute;
-        content: "";
-        right: 0px;
-        top: 50%;
-        display: block;
-        width: 12px;
-        height: 30px;
-        z-index: 9999;
-        background-color: transparent;
-        border-left: 1px solid #BDC9CF;
-    }
-
+    .editor__separrator::before,
     .editor__separrator::after {
         position: absolute;
         content: "";
-        left: 0px;
         top: 50%;
         display: block;
         width: 12px;
         height: 30px;
         z-index: 9999;
         background-color: transparent;
+    }
+
+    .editor__separrator::before {
+        right: 0px;
+        border-left: 1px solid #BDC9CF; 
+    }
+
+    .editor__separrator::after {
+        left: 0px;
         border-right: 1px solid #BDC9CF;
     }
 
