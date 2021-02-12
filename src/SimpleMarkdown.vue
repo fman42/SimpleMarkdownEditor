@@ -12,12 +12,15 @@
                 <div class="editor__preview ml-10" v-html="convertContentToHTML"></div>
             </section>
         </div>
+        <!-- Modals -->
+        <LinkModal></LinkModal>
     </div>
 </template>
 
 <script>
     import {markdown} from 'markdown';
     import Toolbar from './Toolbar.vue';
+    import LinkModal from './Modals/LinkModal.vue';
     import EditorSeparrator from './EditorSeparrator.vue';
 
     export default {
@@ -230,7 +233,8 @@
         },
         components: {
             Toolbar,
-            EditorSeparrator
+            EditorSeparrator,
+            LinkModal
         }
     }
 </script>
